@@ -4,9 +4,16 @@ import Home from "./components/home";
 import Posts from "./components/posts";
 import Profile from "./components/profile";
 import PostItem from "./components/postsitem";
+import Users from "./components/users";
+import Guests from './components/guests.js'
+import Admins from './components/admins.js'
 
 const App = () => {
-  return (
+const user = false
+
+
+
+  return(
     <BrowserRouter>
       <div className="container">
         <header className="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
@@ -20,9 +27,11 @@ const App = () => {
 
           <ul className="nav nav-pills">
             <li className="nav-item">
-             {/*Give active class*/}
-              <NavLink to="/" className={({isActive})=> isActive ?
-                 'nav-link active': 'nav-link'} >
+              {/*Give active class*/}
+              <NavLink 
+                to="/" 
+                className={({isActive})=> isActive ? 'nav-link active':'nav-link' }
+              >
                 Home
               </NavLink>
             </li>
@@ -36,19 +45,42 @@ const App = () => {
                 Profile
               </Link>
             </li>
+            <li className="nav-item">
+              <Link to="users" className="nav-link">
+                Users
+              </Link>
+            </li>
           </ul>
         </header>
-        {/*ROUTES*/}
+            {/*ROUTES*/}
         <Routes>
           <Route path="/" element={<Home />}></Route>
-          <Route path="posts" element={<Posts />}></Route>
-          <Route path="posts/:id/" element={<PostItem />}></Route>
-          <Route path="profile" element={<Profile />}></Route>
-           {/*<Route path="profile" element={<Navigate replace to='/' />}></Route>*/}
+          <Route path="posts" element={<Posts/>}></Route>
+          <Route path="posts/:id" element={<PostItem/>}></Route>
+          {/* <Route path="profile" element={<Profile />}></Route> */}
+          <Route path="profile" element={
+            user ?<Profile />:<Navigate replace to="/" />}
+          >
+          </Route>
+          {/*NESTTED ROUTES USERS is parent component*/}
+          <Route path="users" element={<Users/>}>
+            <Route path="guests" element={<Guests/>}></Route>
+            <Route path="admins" element={<Admins/>}></Route>
+          </Route>
+          <Route
+            path="*"
+            element={
+              <>
+                <h1>Sorry, nothing found</h1>
+              </>
+            }
+          />
         </Routes>
       </div>
+
     </BrowserRouter>
-  );
-};
+  )
+}
 
 export default App;
+
